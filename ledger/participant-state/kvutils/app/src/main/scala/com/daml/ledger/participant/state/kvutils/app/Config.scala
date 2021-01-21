@@ -16,6 +16,7 @@ import com.daml.ledger.resources.ResourceOwner
 import com.daml.platform.configuration.Readers._
 import com.daml.platform.configuration.{IndexConfiguration, MetricsReporter}
 import com.daml.ports.Port
+import io.netty.handler.ssl.ClientAuth
 import scopt.OptionParser
 
 final case class Config[Extra](
@@ -175,6 +176,12 @@ object Config {
         .action((checksEnabled, config) =>
           config.withTlsConfig(c => c.copy(enableCertRevocationChecking = checksEnabled))
         )
+      opt[ClientAuth]("client-auth")
+        .optional()
+        .text(
+          "TLS: The client authentication mode. Must be one of none, optional or require. Defaults to require."
+        )
+        .action((clientAuth, config) => config.withTlsConfig(c => c.copy(clientAuth = clientAuth)))
 
       arg[File]("<archive>...")
         .optional()
