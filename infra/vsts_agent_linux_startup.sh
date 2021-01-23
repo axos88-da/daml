@@ -26,7 +26,7 @@ apt-get install -qy \
   netcat \
   apt-transport-https \
   software-properties-common \
-  fuse2fs
+  fuseext2
 
 # Install dependencies for Chrome (to run Puppeteer tests on the gsg)
 # list taken from: https://github.com/puppeteer/puppeteer/blob/a3d1536a6b6e282a43521bea28aef027a7133df8/docs/troubleshooting.md#chrome-headless-doesnt-launch-on-unix
@@ -121,7 +121,7 @@ for file in "$${!files[@]}"; do
     truncate -s 200g "$HOME/$file"
     mkfs.ext2 -E root_owner=$(id -u):$(id -g) "$HOME/$file"
     mkdir -p "$path"
-    fuse2fs "$HOME/$file" "$path"
+    fuse-ext2 "$HOME/$file" "$path" -o rw+
     echo "$(date -Is) Done."
 done
 CACHE_CLEANUP
